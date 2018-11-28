@@ -62,7 +62,8 @@ public class UserService {
         if(user==null||!user.getApp().getId().equals(app.getId()))
             throw new NotFoundException("No User Found.");
         if(request.getUsername()!=null){
-            if(userRepository.existsByAppAndUsernameAndStatus(app,request.getUsername(),Status.ACTIVE))
+		User userToCheck = userRepository.findByAppAndUsernameAndStatus(app,request.getUsername(),Status.ACTIVE);
+            if(userToCheck!=null&&!userToCheck.getId().equals(user.getId()))
                 throw new AlreadyExistsException("User with username: "+request.getUsername()+" already exists");
             else
                 user.setUsername(request.getUsername());
